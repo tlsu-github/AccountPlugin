@@ -9,7 +9,7 @@ namespace AccountPlugin
 {
     public class AccountPlugin : IPlugin
     {
-        //Create a note of old address whenever address is changed.
+        //Create a note of old address whenever address is changed, if prior address has value.
         public void Execute(IServiceProvider serviceProvider)
         {
             IPluginExecutionContext context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
@@ -29,7 +29,8 @@ namespace AccountPlugin
                     if (accountPreImage.Contains("address1_composite") && accountPreImage.Contains("address1_composite"))
                     {
                         tracingService.Trace("Compare Before and After address.");
-                        if (accountPreImage.GetAttributeValue<String>("address1_composite")!=accountPostImage.GetAttributeValue<String>("address1_composite"))
+                        if (accountPreImage.GetAttributeValue<String>("address1_composite")!=accountPostImage.GetAttributeValue<String>("address1_composite")
+                                &&accountPreImage.GetAttributeValue<String>("address1_composite") != null)
                         {
                             Entity annotation = new Entity("annotation");
                             annotation["objectid"] = new EntityReference(accountPostImage.LogicalName, accountPostImage.Id);
